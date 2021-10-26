@@ -4,13 +4,13 @@ import json
 
 class YTstats:
 
-    def __init__(self, api_key, channel_id):
+    def __init__(self, api_key, video_id):
         self.api_key = api_key
-        self.channel_id = channel_id
-        self.channel_statistics = None
+        self.video_id = video_id
+        self.video_statistics = None
     
-    def get_channel_statistics(self):
-        url = f'https://www.googleapis.com/youtube/v3/channels?part=statistics&id={self.channel_id}&key={self.api_key}'
+    def get_video_statistics(self):
+        url = f'https://www.googleapis.com/youtube/v3/videos?part=statistics&id={self.video_id}&key={self.api_key}'
         print(url)
         json_url = requests.get(url)
         data = json.loads(json_url.text)
@@ -19,17 +19,18 @@ class YTstats:
         except:
             data = None 
 
-        self.channel_statistics = data
+        self.video_statistics = data
         return data
 
     def dump(self):
-        if self.channel_statistics is None:
+        if self.video_statistics is None:
             return
 
-        channel_title = "Ertugrul"
-        channel_title = channel_title.replace(" ", "_").lower()
-        file_name = channel_title + ".json"
+        video_title = "video"
+        video_title = video_title.replace(" ", "_").lower()
+        file_name = video_title + ".json"
         with open(file_name, "w") as f:
-            json.dump(self.channel_statistics, f, indent=4)
+            json.dump(self.video_statistics, f, indent=4)
         
         print('file dumped')
+

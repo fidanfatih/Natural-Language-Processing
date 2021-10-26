@@ -1,11 +1,11 @@
 from youtube_stastistics import YTstats
 
 API_KEY = "AIzaSyDxi_HowF_0WKoWQsFNAiSLwgMb5gWCEDk"
-channel_id = "UC7F1zD7m2-pFHdSaZpV3_Ug"
+video_id = "oQyaI7Bt1Ig"
 
-yt = YTstats(API_KEY, channel_id)
-yt.get_channel_statistics()
-yt.dump()
+yt = YTstats(API_KEY, video_id)
+#yt.get_video_statistics()
+#yt.dump()
 
-# data = yt.get_channel_statistics()
-# print(data)
+data = yt.get_video_statistics()
+print(data)
