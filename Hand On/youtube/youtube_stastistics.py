@@ -17,6 +17,19 @@ class YTstats:
         try:
             data = data["items"][0]["statistics"]
         except:
-            data = None
+            data = None 
 
-        return data 
+        self.channel_statistics = data
+        return data
+
+    def dump(self):
+        if self.channel_statistics is None:
+            return
+
+        channel_title = "Ertugrul"
+        channel_title = channel_title.replace(" ", "_").lower()
+        file_name = channel_title + ".json"
+        with open(file_name, "w") as f:
+            json.dump(self.channel_statistics, f, indent=4)
+        
+        print('file dumped')
