@@ -19,7 +19,6 @@ nltk.download('averaged_perceptron_tagger')
 try:
   with open("test1_2.txt", "r", encoding="utf-8") as file:
     text_data = file.read()
-    print(text_data1)
 except:
   print("There is not such a file  or path is incorrect")
 
@@ -85,6 +84,31 @@ text_data_clean_ne = text_data_clean_brackets
 var1 = re.findall(r'\w+.', text_data_clean_ne)
 var2 = " ".join(var1)
 text_data_clean_punc_alone = var2
+
+text_data_clean2 = clean(text_data_clean_punc_alone,
+                        fix_unicode=True,
+                        to_ascii=False,
+                        lower=False,
+                        normalize_whitespace=True,
+                        no_line_breaks=True,
+                        strip_lines=False,
+                        keep_two_line_breaks=False,
+                        no_urls=True,
+                        no_emails=True,
+                        no_phone_numbers=True,
+                        no_numbers=True,
+                        no_digits=True,
+                        no_currency_symbols=True,
+                        no_punct=False,
+                        no_emoji=True,
+                        replace_with_url='',
+                        replace_with_email='',
+                        replace_with_phone_number='',
+                        replace_with_number='',
+                        replace_with_digit='',
+                        replace_with_currency_symbol='',
+                        replace_with_punct=''
+                        ) # White space
 
 word_tokens_2 = word_tokenize(text_data_clean2.lower())
 
