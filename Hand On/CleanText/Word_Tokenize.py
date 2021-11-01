@@ -1,5 +1,6 @@
 #!pip install unicodedata2
 #!pip install clean-text
+#!pip install openpyxl
 
 import numpy as np
 import pandas as pd
@@ -9,7 +10,9 @@ from nltk import word_tokenize, sent_tokenize
 from nltk.tokenize import sent_tokenize, word_tokenize
 from cleantext import clean
 from nltk.stem import WordNetLemmatizer
+from openpyxl.workbook import Workbook
 nltk.download('tagsets')
+nltk.download('wordnet')
 nltk.download('punkt')
 nltk.help.upenn_tagset('NNP')
 nltk.help.upenn_tagset('NN')
