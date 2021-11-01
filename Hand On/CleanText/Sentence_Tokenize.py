@@ -149,6 +149,8 @@ total_value = sent_token_no_punc_df2.frequency.sum()
 
 sent_token_no_punc_df2["ratio"] = (sent_token_no_punc_df2.frequency/total_value)*100
 
+sent_token_no_punc_df2["cumul_ratio"] = np.cumsum(sent_token_no_punc_df2["ratio"])
+
 def sentence_lenght(sentence):
     var1 = word_tokenize(sentence)
     if len(var1) <= 10:
@@ -157,4 +159,10 @@ def sentence_lenght(sentence):
     else:
         return "sentence is bigger ten word"
 
-sent_token_no_punc_df2.sentence.apply(sentence_lenght)
+sent_token_no_punc_df2.sentence = sent_token_no_punc_df2.sentence.apply(sentence_lenght)
+
+sent_token_no_punc_df2 = sent_token_no_punc_df2.reset_index(drop=True)
+
+sent_token_no_punc_df3 = sent_token_no_punc_df2.head(50000)
+
+sent_token_no_punc_df3.to_excel("Sentence_Tokenize.xlsx", sheet_name='sent_tokenize', index=False)

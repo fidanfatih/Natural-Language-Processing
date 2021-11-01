@@ -132,6 +132,6 @@ freq_word_df["ratio"] = round((freq_word_df.frequency/(sum(freq_word_df.frequenc
 
 freq_word_df["cumul_ratio"] = np.cumsum(freq_word_df["ratio"])
 
-freq_word_df_50000 = freq_word_df.head(50000)
+freq_word_df_5 = freq_word_df[freq_word_df.frequency>=5]
 
-freq_word_df_50000.to_excel("Word_Tokenie.xlsx", sheet_name='word_tokenize_50000', index=False)
+freq_word_df_5.to_excel("Word_Tokenize.xlsx", sheet_name='word_tokenize_5', index=False)
