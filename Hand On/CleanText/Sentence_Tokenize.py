@@ -10,6 +10,7 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 from cleantext import clean
 from nltk.stem import WordNetLemmatizer
 nltk.download('tagsets')
+nltk.download('punkt')
 nltk.help.upenn_tagset('NNP')
 nltk.help.upenn_tagset('NN')
 nltk.download('maxent_ne_chunker')
