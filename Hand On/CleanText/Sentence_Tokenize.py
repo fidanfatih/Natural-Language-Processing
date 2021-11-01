@@ -11,6 +11,7 @@ from cleantext import clean
 from nltk.stem import WordNetLemmatizer
 nltk.download('tagsets')
 nltk.download('punkt')
+nltk.download('wordnet')
 nltk.help.upenn_tagset('NNP')
 nltk.help.upenn_tagset('NN')
 nltk.download('maxent_ne_chunker')
