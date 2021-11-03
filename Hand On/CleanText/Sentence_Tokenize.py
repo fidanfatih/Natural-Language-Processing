@@ -26,7 +26,15 @@ try:
 except:
   print("There is not such a file  or path is incorrect")
 
-text_data_clean = clean(text_data,
+text_data_clean_brackets = re.sub('[\(\[\{].*?[\)\]\}]', '', text_data)
+
+custom_char = ["-","#",":"]
+for i in custom_char:
+    text_data_clean_brackets = text_data_clean_brackets.replace(i, '')
+
+text_data_clean_apos = re.sub(r"\'", "", string=text_data_clean_brackets) 
+
+text_data_clean = clean(text_data_clean_apos,
                         fix_unicode=True,
                         to_ascii=False,
                         lower=False,
@@ -51,84 +59,51 @@ text_data_clean = clean(text_data,
                         replace_with_punct=''
                         )
 
-text_data_clean_apos = re.sub(r"\'", "", string=text_data_clean)
+#word_tokens = nltk.word_tokenize(text_data_clean_brackets)
 
-text_data_clean_brackets = re.sub('[\(\[\{].*?[\)\]\}]', '', text_data_clean_apos)
+#pos_tags = nltk.pos_tag(word_tokens)
 
-custom_char = ["-","#",":"]
-for i in custom_char:
-    text_data_clean_brackets = text_data_clean_brackets.replace(i, '')  # must be equal each other
+#chunks = nltk.ne_chunk(pos_tags, binary=True)
 
-word_tokens = nltk.word_tokenize(text_data_clean_brackets)
-
-pos_tags = nltk.pos_tag(word_tokens)
-
-chunks = nltk.ne_chunk(pos_tags, binary=True)
-
-entities =[]
-labels =[]
-for chunk in chunks:
-    if hasattr(chunk,'label'):
-        #print(chunk)
-        entities.append(' '.join(c[0] for c in chunk))
-        labels.append(chunk.label())
+#entities =[]
+#labels =[]
+#for chunk in chunks:
+#    if hasattr(chunk,'label'):
+#        #print(chunk)
+#        entities.append(' '.join(c[0] for c in chunk))
+#        labels.append(chunk.label())
         
-entities_labels = list(set(zip(entities, labels)))
-entities_df = pd.DataFrame(entities_labels)
-entities_df.columns = ["Entities","Labels"]
+#entities_labels = list(set(zip(entities, labels)))
+#entities_df = pd.DataFrame(entities_labels)
+#entities_df.columns = ["Entities","Labels"]
 
-entities_list = []
-for i in entities_labels:
-    entities_list.append(i[0])
+#entities_list = []
+#for i in entities_labels:
+#    entities_list.append(i[0])
 
-for ent in entities_list:
-    text_data_clean_brackets = text_data_clean_brackets.replace(ent, '')
-text_data_clean_ne = text_data_clean_brackets
+#for ent in entities_list:
+#    text_data_clean_brackets = text_data_clean_brackets.replace(ent, '')
+#text_data_clean_ne = text_data_clean_brackets
 
-var1 = re.findall(r'\w+.', text_data_clean_ne)
-var2 = " ".join(var1)
-text_data_clean_punc_alone = var2
+#var1 = re.findall(r'\w+.', text_data_clean_ne)
+#var2 = " ".join(var1)
+#text_data_clean_punc_alone = var2
 
-text_data_clean2 = clean(text_data_clean_punc_alone,
-                        fix_unicode=True,
-                        to_ascii=False,
-                        lower=False,
-                        normalize_whitespace=True,
-                        no_line_breaks=True,
-                        strip_lines=False,
-                        keep_two_line_breaks=False,
-                        no_urls=True,
-                        no_emails=True,
-                        no_phone_numbers=True,
-                        no_numbers=True,
-                        no_digits=True,
-                        no_currency_symbols=True,
-                        no_punct=False,
-                        no_emoji=True,
-                        replace_with_url='',
-                        replace_with_email='',
-                        replace_with_phone_number='',
-                        replace_with_number='',
-                        replace_with_digit='',
-                        replace_with_currency_symbol='',
-                        replace_with_punct=''
-                        ) # White space
-
-sentence = sent_tokenize(text_data_clean2)
+sentence = sent_tokenize(text_data_clean)
 
 sentence_lower =  []
 for i in sentence:
     sentence_lower.append(i.lower())
 
-sent_token_2 = []
-for i in sentence_lower:
-    sent_token_2.append(i.strip("-").strip("\n").strip("(").strip(")").strip(",").strip(" ").strip(", "))
+#sent_token_2 = []
+#for i in sentence_lower:
+#    sent_token_2.append(i.strip("-").strip("\n").strip("(").strip(")").strip(",").strip(" ").strip(", "))
 
-sent_token_2 = pd.DataFrame(sent_token_2)
+sent_token_df = pd.DataFrame(sentence_lower)
 
-sent_token_2 = sent_token_2.rename(columns={0:"sentence"})
+sent_token_df = sent_token_df.rename(columns={0:"sentence"})
 
-sent_token_no_punc = sent_token_2.sentence.apply(lambda x: re.sub(pattern="[^\w\s]", repl="", string=x))
+sent_token_no_punc = sent_token_df.sentence.apply(lambda x: re.sub(pattern="[^\w\s]", repl="", string=x))
 
 sent_token_no_punc_df = pd.DataFrame(data=sent_token_no_punc)
 
@@ -155,6 +130,8 @@ sent_token_no_punc_df2["ratio"] = (sent_token_no_punc_df2.frequency/total_value)
 
 sent_token_no_punc_df2["cumul_ratio"] = np.cumsum(sent_token_no_punc_df2["ratio"])
 
+sent_token_no_punc_df3 = sent_token_no_punc_df2.head(500000)
+
 def sentence_lenght(sentence):
     var1 = word_tokenize(sentence)
     if len(var1) <= 10:
@@ -163,10 +140,8 @@ def sentence_lenght(sentence):
     else:
         return "sentence is bigger ten word"
 
-sent_token_no_punc_df2.sentence = sent_token_no_punc_df2.sentence.apply(sentence_lenght)
+sent_token_no_punc_df3.sentence = sent_token_no_punc_df3.sentence.apply(sentence_lenght)
 
-sent_token_no_punc_df2 = sent_token_no_punc_df2.reset_index(drop=True)
-
-sent_token_no_punc_df3 = sent_token_no_punc_df2.head(50000)
+sent_token_no_punc_df3 = sent_token_no_punc_df3.reset_index(drop=True)
 
 sent_token_no_punc_df3.to_excel("Sentence_Tokenize.xlsx", sheet_name='sent_tokenize', index=False)
