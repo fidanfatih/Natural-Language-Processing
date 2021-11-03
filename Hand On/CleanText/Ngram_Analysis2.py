@@ -31,10 +31,12 @@ try:
 except:
   print("There is not such a file  or path is incorrect")
 
-text_data_clean = clean(text_data,
+text_data_clean_brackets = re.sub('[\(\[\{].*?[\)\]\}]', '', text_data)
+
+text_data_clean = clean(text_data_clean_brackets,
                         fix_unicode=True,
                         to_ascii=False,
-                        lower=False,
+                        lower=True,
                         normalize_whitespace=True,
                         no_line_breaks=True,
                         strip_lines=False,
@@ -45,7 +47,7 @@ text_data_clean = clean(text_data,
                         no_numbers=True,
                         no_digits=True,
                         no_currency_symbols=True,
-                        no_punct=False,
+                        no_punct=True,
                         no_emoji=True,
                         replace_with_url='',
                         replace_with_email='',
@@ -56,78 +58,9 @@ text_data_clean = clean(text_data,
                         replace_with_punct=''
                         )
 
-text_data_clean_apos = re.sub(r"\'", "", string=text_data_clean)
-
-text_data_clean_brackets = re.sub('[\(\[\{].*?[\)\]\}]', '', text_data_clean_apos)
-
-custom_char = ["-","#",":"]
-for i in custom_char:
-    text_data_clean_brackets = text_data_clean_brackets.replace(i, '') 
-
-word_tokens = nltk.word_tokenize(text_data_clean_brackets)
-
-pos_tags = nltk.pos_tag(word_tokens)
-
-chunks = nltk.ne_chunk(pos_tags, binary=True)
-
-entities =[]
-labels =[]
-for chunk in chunks:
-    if hasattr(chunk,'label'):
-        #print(chunk)
-        entities.append(' '.join(c[0] for c in chunk))
-        labels.append(chunk.label())
-        
-entities_labels = list(set(zip(entities, labels)))
-entities_df = pd.DataFrame(entities_labels)
-entities_df.columns = ["Entities","Labels"]
-
-entities_list = []
-for i in entities_labels:
-    entities_list.append(i[0])
-
-for ent in entities_list:
-    text_data_clean_brackets = text_data_clean_brackets.replace(ent, '')
-text_data_clean_ne = text_data_clean_brackets
-
-var1 = re.findall(r'\w+.', text_data_clean_ne)
-var2 = " ".join(var1)
-text_data_clean_punc_alone = var2
-
-text_data_clean2 = clean(text_data_clean_punc_alone,
-                        fix_unicode=True,
-                        to_ascii=False,
-                        lower=False,
-                        normalize_whitespace=True,
-                        no_line_breaks=True,
-                        strip_lines=False,
-                        keep_two_line_breaks=False,
-                        no_urls=True,
-                        no_emails=True,
-                        no_phone_numbers=True,
-                        no_numbers=True,
-                        no_digits=True,
-                        no_currency_symbols=True,
-                        no_punct=False,
-                        no_emoji=True,
-                        replace_with_url='',
-                        replace_with_email='',
-                        replace_with_phone_number='',
-                        replace_with_number='',
-                        replace_with_digit='',
-                        replace_with_currency_symbol='',
-                        replace_with_punct=''
-                        ) # White space
-
-word_tokens_2 = word_tokenize(text_data_clean2.lower())
-
-tokens_without_punc = [w for w in word_tokens_2 if w.isalpha()]
-
-text = " ".join(tokens_without_punc)
-
 twogram_1 = []
 n = 2
-twograms = ngrams(text.split(), n)
+twograms = ngrams(text_data_clean.split(), n)
 
 for grams in twograms:
     twogram_1.append(list(grams))
@@ -154,7 +87,7 @@ twogram_3_df.to_excel("TwoGrams.xlsx", sheet_name='twograms', index=False)
 
 threegram_1 = []
 n = 3
-threegrams = ngrams(text.split(), n)
+threegrams = ngrams(text_data_clean.split(), n)
 
 for grams in threegrams:
     threegram_1.append(list(grams))
@@ -181,7 +114,7 @@ threegram_3_df.to_excel("ThreeGrams.xlsx", sheet_name='threegrams', index=False)
 
 fourgram_1 = []
 n = 4
-fourgrams = ngrams(text.split(), n)
+fourgrams = ngrams(text_data_clean.split(), n)
 
 for grams in fourgrams:
     fourgram_1.append(list(grams))
@@ -208,7 +141,7 @@ fourgram_3_df.to_excel("FourGrams.xlsx", sheet_name='fourgrams', index=False)
 
 fivegram_1 = []
 n = 5
-fivegrams = ngrams(text.split(), n)
+fivegrams = ngrams(text_data_clean.split(), n)
 
 for grams in fivegrams:
     fivegram_1.append(list(grams))
@@ -235,7 +168,7 @@ fivegram_3_df.to_excel("FiveGrams.xlsx", sheet_name='fivegrams', index=False)
 
 sixgram_1 = []
 n = 6
-sixgrams = ngrams(text.split(), n)
+sixgrams = ngrams(text_data_clean.split(), n)
 
 for grams in sixgrams:
     sixgram_1.append(list(grams))
