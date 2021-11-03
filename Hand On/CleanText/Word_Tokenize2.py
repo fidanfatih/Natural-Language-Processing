@@ -53,7 +53,7 @@ text_data_clean = clean(text_data_clean_brackets,
                         replace_with_punct=''
                         )
 
-word_tokens = nltk.word_tokenize(text_data_clean_brackets)
+word_tokens = nltk.word_tokenize(text_data_clean)
 
 tokens_without_punc_lemma = []
 for word in word_tokens:

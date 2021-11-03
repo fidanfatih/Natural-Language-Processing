@@ -59,45 +59,11 @@ text_data_clean = clean(text_data_clean_apos,
                         replace_with_punct=''
                         )
 
-#word_tokens = nltk.word_tokenize(text_data_clean_brackets)
-
-#pos_tags = nltk.pos_tag(word_tokens)
-
-#chunks = nltk.ne_chunk(pos_tags, binary=True)
-
-#entities =[]
-#labels =[]
-#for chunk in chunks:
-#    if hasattr(chunk,'label'):
-#        #print(chunk)
-#        entities.append(' '.join(c[0] for c in chunk))
-#        labels.append(chunk.label())
-        
-#entities_labels = list(set(zip(entities, labels)))
-#entities_df = pd.DataFrame(entities_labels)
-#entities_df.columns = ["Entities","Labels"]
-
-#entities_list = []
-#for i in entities_labels:
-#    entities_list.append(i[0])
-
-#for ent in entities_list:
-#    text_data_clean_brackets = text_data_clean_brackets.replace(ent, '')
-#text_data_clean_ne = text_data_clean_brackets
-
-#var1 = re.findall(r'\w+.', text_data_clean_ne)
-#var2 = " ".join(var1)
-#text_data_clean_punc_alone = var2
-
 sentence = sent_tokenize(text_data_clean)
 
 sentence_lower =  []
 for i in sentence:
     sentence_lower.append(i.lower())
-
-#sent_token_2 = []
-#for i in sentence_lower:
-#    sent_token_2.append(i.strip("-").strip("\n").strip("(").strip(")").strip(",").strip(" ").strip(", "))
 
 sent_token_df = pd.DataFrame(sentence_lower)
 
